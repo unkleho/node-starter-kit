@@ -1,5 +1,5 @@
-import { fetchData } from '../index.js';
+import start from '../index.js';
 
 it('should start', () => {
-  expect(fetchData()).toEqual({ title: 'test' });
+  expect(start()).toEqual('hi');
 });
