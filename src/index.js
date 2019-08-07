@@ -1,1 +1,5 @@
-console.log('again');
+const start = () => {
+  return 'hi';
+};
+
+export default start;
