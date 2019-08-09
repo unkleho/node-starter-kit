@@ -32,19 +32,27 @@ async function fetchItem(id) {
 }
 
 async function fetchChildren(id) {
-  const { data } = await fetch.get(
-    `/collection/v1/items/${id}/hierarchy-children`,
-  );
+  try {
+    const { data } = await fetch.get(
+      `/collection/v1/items/${id}/hierarchy-children`,
+    );
 
-  return data.items.data;
+    return data.items.data;
+  } catch (error) {
+    return null;
+  }
 }
 
 async function fetchFiles(id) {
-  const { data } = await fetch.get(
-    `/collection/v1/items/${id}/hierarchy-files`,
-  );
+  try {
+    const { data } = await fetch.get(
+      `/collection/v1/items/${id}/hierarchy-files`,
+    );
 
-  return data.files.data;
+    return data.files.data;
+  } catch (error) {
+    return null;
+  }
 }
 
 export default scrape;
