@@ -1,12 +1,20 @@
 import scrape from '../scraper';
 
-it('should return data', async () => {
-  const results = await scrape('n7oVw8Zn');
+jest.setTimeout(30000);
 
-  expect(results.length).toEqual(9);
-  expect(results[0]).toMatchObject({
+it('should return data', async () => {
+  const result = await scrape('n7oVw8Zn');
+
+  expect(result.title).toEqual(
+    'May Gibbs papers, relics and pictorial material, 1900-1969'
+  );
+  expect(result.children.length).toEqual(9);
+  expect(result.children[0]).toMatchObject({
     title: 'Series 01: Literary manuscripts, 1901-1967',
   });
-  expect(results[0].children.length).toEqual(5);
-  expect(results[1].children.length).toEqual(3);
+
+  expect(result.children[0].children.length).toEqual(5);
+  expect(result.children[0].children[0].title).toEqual(
+    'Series 01 Sub-Series 01: Published works, 1916-1953'
+  );
 });

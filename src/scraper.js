@@ -1,42 +1,36 @@
 import fetch from './lib/fetch';
 
 const scrape = async id => {
-  const children = await fetchChildren(id);
-
-  const grandChildren = await fetchGrandChildren(children);
-
-  async function fetchChildren(id) {
-    const { data } = await fetch.get(
-      `/collection/v1/items/${id}/hierarchy-children`
-    );
-
-    return data.items.data;
-  }
-
-  async function fetchGrandChildren(children) {
-    const promises = children.map(async child => {
-      return await fetchChildren(child.id);
-    });
-
-    const grandChildren = await Promise.all(promises);
-
-    return children.map((child, i) => {
-      return {
-        ...child,
-        children: grandChildren[i],
-      };
-    });
-  }
-
-  return grandChildren;
+  return fetchItem(id);
 };
 
-// const fetchTree = async id => {
-//   const children = await fetchChildren(id);
+async function fetchItem(id) {
+  const {
+    data: { item },
+  } = await fetch.get(`/collection/v1/items/${id}`);
 
-//   for (const child of children) {
-//     const result = await fetchChildren(child.id);
-//   }
-// };
+  const children = await fetchChildren(id);
+
+  if (children.length > 0) {
+    const childrenResult = await Promise.all(
+      children.map(child => fetchItem(child.id))
+    );
+
+    return {
+      ...item,
+      children: childrenResult,
+    };
+  }
+
+  return item;
+}
+
+async function fetchChildren(id) {
+  const { data } = await fetch.get(
+    `/collection/v1/items/${id}/hierarchy-children`
+  );
+
+  return data.items.data;
+}
 
 export default scrape;
